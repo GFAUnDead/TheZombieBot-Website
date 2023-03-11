@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>TheZombiesBot - Mods</title>
+		<title>TheZombiesBot</title>
 		<meta charset="utf-8" />
 		<link rel="icon" href="./images/logo.png" type="image/png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -17,8 +17,9 @@
 				</header>
 				<nav id="nav">
 					<ul>
-						<li><a href="./index.html" target="_self">Commands</a></li>
-						<li><a href="./werewolf.html" target="_self">WereWolf Commands</a></li>
+						<li><a href="#commands" target="_self">Commands</a></li>
+						<li><a href="./mods.php" target="_self">Mod Commands</a></li>
+						<li><a href="./werewolf.php" target="_self">WereWolf Commands</a></li>
 						<li><a href="https://gfaundead.stream" target="_blank">Main Website</a></li>
 					</ul>
 				</nav>
@@ -51,12 +52,55 @@
 								<div class="container">
 									<h3>COMMANDS - !cmds</h3>
 									<ul class="feature-icons">
-										<li><strong>MODS:</strong>
-											<br>!rso (During raids only)
-											<br>!so  (General shout out)
-											<br>!sso (People you know who stream)
-											<br />
-											<br>!justchatting<br />(Changes the twitch category to "Just Chatting")
+										<li><strong>PUBLIC:</strong>
+											<br>!lurk, !back, !here, !unlurk
+											<br>!followage, !followerage
+											<br>!followed, !followers
+											<br>!lastseen, !watchtime
+											<br>!playlist, !nowplaying
+											<br>!birthday, !christmas
+											<br>!cat, !dog, !jokes
+											<br>!badjoke, !dadjokes
+											<br>!zombie
+											<br>!link, !subscribe
+											<br>!uptime, !advice
+											<br>!weather, !game
+											<br>!ticket, !tickets
+											<br>!hug, !squeeze
+											<br>!fact, !facts
+											<br>!dono, !eqd
+											<br>!id, !fuckyou
+											<br>!info, !mods, !game
+											<br>!bitrate, !fps
+											<br>!walkon, !wo
+											<br>!roll, !time
+											<br>!emotes, !points
+											<br>‌!12hours
+											<br>!death, !google
+											<br>‌!fireworks
+											<br>!grapes, !waddle
+											<br>!prime, !typo
+											<br>!host, !hosted
+											<br>!jaycetime, !skitztime
+											<br>!astontime, !anytime
+											<br>!wishlist
+										</li>
+										<li><strong>SOCIALS:</strong>
+											<br>‌‌!allsocials or !socials
+											<br>‌‌!discord
+											<br>‌‌!facebook
+											<br>‌‌!github
+											<br>‌‌!instagram
+											<br>‌‌!merch
+											<br>‌‌!patreon
+											<br>‌‌!tiktok
+											<br>‌‌!trovo
+											<br>‌‌!hover
+											<br>‌‌!twitter
+											<br>‌‌!youtube
+											<br>‌‌!reddit
+											<br>!kit
+											<br>‌‌!website
 										</li>
 									</ul>
 								</div>

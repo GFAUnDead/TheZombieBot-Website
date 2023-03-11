@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>TheZombiesBot - Privacy Policy</title>
+		<title>TheZombiesBot - Mods</title>
 		<meta charset="utf-8" />
 		<link rel="icon" href="./images/logo.png" type="image/png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -17,8 +17,8 @@
 				</header>
 				<nav id="nav">
 					<ul>
-						<li><a href="./index.html" target="_self">Commands</a></li>
-						<li><a href="./mods.html" target="_self">Mod Commands</a></li>
+						<li><a href="./index.php" target="_self">Commands</a></li>
+						<li><a href="./werewolf.php" target="_self">WereWolf Commands</a></li>
 						<li><a href="https://gfaundead.stream" target="_blank">Main Website</a></li>
 					</ul>
 				</nav>
@@ -38,8 +38,10 @@
 							<section id="about">
 								<div class="container">
 									<header class="major">
-										<h2>Privacy Policy</h2>
-										<p>What is the Privacy Policy?</p>
+										<h2>TheZombiesBot</h2>
+										<p>What is TheZombiesBot?<br>
+											‌It is the Twitch Chat Bot built by gfaUnDead.<br>
+											This bot helps with moderation and chat interactions!</p>
 									</header>
 									<p></p>
 								</div>
@@ -47,13 +49,15 @@
 
 							<section id="commands">
 								<div class="container">
+									<h3>COMMANDS - !cmds</h3>
 									<ul class="feature-icons">
-										<h3>What personal data we collect and why we collect it</h3>
-                                        <h4>Comments/Chats</h4>
-                                        <p>When visitors leave comments/chats in our Twitch Chat we collect the comment shown in the chat, and also the user's username from Twitch.
-                                        <h3>How long we retain your data</h3>
-                                        <p>If you leave a comment/chat, the comment/chat and your username from Twitch are retained indefinitely.
-                                        </li>
+										<li><strong>MODS:</strong>
+											<br>!rso (During raids only)
+											<br>!so  (General shout out)
+											<br>!sso (People you know who stream)
+											<br />
+											<br>!justchatting<br />(Changes the twitch category to "Just Chatting")
+										</li>
 									</ul>
 								</div>
 							</section>

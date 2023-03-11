@@ -17,8 +17,8 @@
 				</header>
 				<nav id="nav">
 					<ul>
-						<li><a href="./index.html" target="_self">Commands</a></li>
-						<li><a href="./mods.html" target="_self">Mod Commands</a></li>
+						<li><a href="./index.php" target="_self">Commands</a></li>
+						<li><a href="./mods.php" target="_self">Mod Commands</a></li>
 						<li><a href="https://gfaundead.stream" target="_blank">Main Website</a></li>
 					</ul>
 				</nav>
