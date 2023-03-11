@@ -52,88 +52,118 @@
 								<div class="container">
 									<h3>COMMANDS</h3>
 									<?php
-										// Connect to the database
-										$servername = "localhost";
-										$username = "thezombiebot_commands";
-										$password = "(REDACTED)";
+    									// Connect to the database
+    									$servername = "localhost";
+    									$username = "thezombiebot_commands";
+    									$password = "(REDACTED)";
 										$dbname = "thezombiebot_commands";
-																														
-										$conn = new mysqli($servername, $username, $password, $dbname);
-										if ($conn->connect_error) {
-											die("Connection failed: " . $conn->connect_error);
-										}
-										
-										// Retrieve the data from the table
-										$sql = "SELECT * FROM commands WHERE command LIKE '%" . $_GET['search'] . "%' ORDER BY userlevel DESC";
-										$result = $conn->query($sql);
-										
-										// Determine how many entries to display per page
-										$entries_per_page = 10;
-										$page = isset($_GET['page']) ? $_GET['page'] : 1;
-										$start = ($page - 1) * $entries_per_page;
-										$total_entries = $result->num_rows;
-										$total_pages = ceil($total_entries / $entries_per_page);
-										
-										// Display the search bar and the table of entries
-										echo "<form method='GET' action=''>";
-										echo "<input type='text' name='search' placeholder='Search for command'>";
-										echo "<input type='submit' value='Search'>";
+									
+    									$conn = new mysqli($servername, $username, $password, $dbname);
+    									if ($conn->connect_error) {
+        									die("Connection failed: " . $conn->connect_error);
+									    }
+
+									    // Determine how many entries to display per page
+    									$entries_per_page = 25;
+    									$page = isset($_GET['page']) ? $_GET['page'] : 1;
+    									$start = ($page - 1) * $entries_per_page;
+									
+    									// Retrieve the data from the table
+    									$sql = "SELECT * FROM commands WHERE command LIKE '%" . $_GET['search'] . "%' ORDER BY id ASC LIMIT $start, $entries_per_page";
+    									$result = $conn->query($sql);
+									
+    									// Count the total number of entries
+										$total_entries_sql = "SELECT COUNT(*) as count FROM commands WHERE command LIKE '%" . $_GET['search'] . "%'";
+    									$total_entries_result = $conn->query($total_entries_sql);
+    									$total_entries_row = $total_entries_result->fetch_assoc();
+    									$total_entries = $total_entries_row['count'];
+    									$total_pages = ceil($total_entries / $entries_per_page);
+									
+    									// Display the search bar and the table of entries
+    									echo "<form method='GET' action=''>";
+    									echo "<input type='text' name='search' id='search' placeholder='Search for command'>";
 										echo "</form>";
-										
-										echo "<table>";
-										echo "<tr><th>Command</th><th>Message</th><th>User Level</th></tr>";
-										
-										while ($row = mysqli_fetch_assoc($result)) {
-    										$command = $row['command'];
-    										$message = $row['message'];
-    										$userlevel = $row['userlevel'];
-										    
-    										// Convert the userlevel value to its corresponding text value
-    										switch ($userlevel) {
-        										case 1:
-            										$userlevel_text = 'Caster';
-            										break;
-        										case 2:
-            										$userlevel_text = 'Mods';
-            										break;
-        										case 3:
-            										$userlevel_text = 'VIPs';
-            										break;
-        										case 4:
-            										$userlevel_text = 'Everyone';
-            										break;
-        										default:
-            										$userlevel_text = 'Unknown';
-            										break;
-    										}
-										    
-    										// Display the table row with the data
-    										echo "<tr><td>$command</td><td>$message</td><td>$userlevel_text</td></tr>";
-										}
-										
-										echo "</table>";
-										
-										// Display the pagination links
-										echo "<div>";
-										echo "Page " . $page . " of " . $total_pages . ": ";
-										for ($i = 1; $i <= $total_pages; $i++) {
-											if ($i == $page) {
-												echo $i . " ";
-											} else {
-												echo "<a href='?page=" . $i . "&search=" . $_GET['search'] . "'>" . $i . "</a> ";
-											}
-										}
-										echo "</div>";
-										
-										$conn->close();										
+									
+    									echo "<table>";
+    									echo "<tr><th>Command</th><th>Message</th><th>User Level</th></tr>";
+									
+    									while ($row = mysqli_fetch_assoc($result)) {
+        									$command = $row['command'];
+        									$message = $row['message'];
+        									$userlevel = $row['userlevel'];
+									
+        									// Convert the userlevel value to its corresponding text value
+        									switch ($userlevel) {
+            									case 1:
+                									$userlevel_text = 'Caster';
+                									break;
+													case 2:
+														$userlevel_text = 'Mods';
+														break;
+														case 3:
+															$userlevel_text = 'VIPs';
+															break;
+															case 4:
+																$userlevel_text = 'Everyone';
+																break;
+																default:
+																$userlevel_text = 'Unknown';
+																break;
+															}
+									
+        									// Display the table row with the data
+        									echo "<tr><td>$command</td><td>$message</td><td>$userlevel_text</td></tr>";
+    									}
+									
+    									echo "</table>";
+									
+    									// Display the pagination links
+    									echo "<div>";
+    									echo "Page " . $page . " of " . $total_pages . ": ";
+    									for ($i = 1; $i <= $total_pages; $i++) {
+        									if ($i == $page) {
+            									echo $i . " ";
+        									} else {
+            									echo "<a href='?page=" . $i . "&search=" . $_GET['search'] . "'>" . $i . "</a> ";
+        									}
+    									}
+    									echo "</div>";
+									
+    									$conn->close();
 										?>
+										
+										<script>
+    										// Get the search input field
+    										var searchInput = document.getElementById("search");
+										
+    										// Add an event listener to the search input field
+    										searchInput.addEventListener("input", function() {
+        										// Get the search term from the search input field
+    										var searchTerm = searchInput.value;
+    										// Construct the URL for the AJAX request
+    										var url = "search.php?search=" + encodeURIComponent(searchTerm);
+    										// Create a new XMLHttpRequest object
+    										var xhr = new XMLHttpRequest();
+    										// Set the function to handle the response
+    										xhr.onreadystatechange = function() {
+    										if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    										// Update the search results div with the response text
+    										document.getElementById("search-results").innerHTML = this.responseText;
+    										}
+    										};
+    										// Open the XMLHttpRequest with the URL
+    										xhr.open("GET", url, true);
+    										// Send the XMLHttpRequest
+    										xhr.send();
+    										});
+    										</script>
 								</div>
 							</section>
 
 					<section id="footer">
 						<div class="container">
 							<ul class="copyright">
-								<strong>Copyright &copy; 2022. All rights reserved gfaUnDead</strong>
+								<strong>Copyright &copy; 2023. All rights reserved gfaUnDead</strong>
 							</ul>
 						</div>
 					</section>
