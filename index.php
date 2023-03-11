@@ -55,7 +55,7 @@
 										// Connect to the database
 										$servername = "localhost";
 										$username = "thezombiebot_commands";
-										$password = "STqRDu86oPjcqQxI";
+										$password = "(REDACTED)";
 										$dbname = "thezombiebot_commands";
 																														
 										$conn = new mysqli($servername, $username, $password, $dbname);
