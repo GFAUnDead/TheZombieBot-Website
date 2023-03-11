@@ -51,58 +51,66 @@
 							<section id="commands">
 								<div class="container">
 									<h3>COMMANDS - !cmds</h3>
-									<ul class="feature-icons">
-										<li><strong>PUBLIC:</strong>
-											<br>!lurk, !back, !here, !unlurk
-											<br>!followage, !followerage
-											<br>!followed, !followers
-											<br>!lastseen, !watchtime
-											<br>!playlist, !nowplaying
-											<br>!birthday, !christmas
-											<br>!cat, !dog, !jokes
-											<br>!badjoke, !dadjokes
-											<br>!zombie
-											<br>!link, !subscribe
-											<br>!uptime, !advice
-											<br>!weather, !game
-											<br>!ticket, !tickets
-											<br>!hug, !squeeze
-											<br>!fact, !facts
-											<br>!dono, !eqd
-											<br>!id, !fuckyou
-											<br>!info, !mods, !game
-											<br>!bitrate, !fps
-											<br>!walkon, !wo
-											<br>!roll, !time
-											<br>!emotes, !points
-											<br>‌!12hours
-											<br>!death, !google
-											<br>‌!fireworks
-											<br>!grapes, !waddle
-											<br>!prime, !typo
-											<br>!host, !hosted
-											<br>!jaycetime, !skitztime
-											<br>!astontime, !anytime
-											<br>!wishlist
-										</li>
-										<li><strong>SOCIALS:</strong>
-											<br>‌‌!allsocials or !socials
-											<br>‌‌!discord
-											<br>‌‌!facebook
-											<br>‌‌!github
-											<br>‌‌!instagram
-											<br>‌‌!merch
-											<br>‌‌!patreon
-											<br>‌‌!tiktok
-											<br>‌‌!trovo
-											<br>‌‌!hover
-											<br>‌‌!twitter
-											<br>‌‌!youtube
-											<br>‌‌!reddit
-											<br>!kit
-											<br>‌‌!website
-										</li>
-									</ul>
+									<?php
+										// Connect to the database
+										$servername = "localhost";
+										$username = "thezombiebot_commands";
+										$password = "STqRDu86oPjcqQxI";
+										$dbname = "thezombiebot_commands";
+																														
+										$conn = new mysqli($servername, $username, $password, $dbname);
+										if ($conn->connect_error) {
+											die("Connection failed: " . $conn->connect_error);
+										}
+										
+										// Retrieve the data from the table
+										$sql = "SELECT * FROM myTable WHERE command LIKE '%" . $_GET['search'] . "%' ORDER BY userlevel DESC";
+										$result = $conn->query($sql);
+										
+										// Determine how many entries to display per page
+										$entries_per_page = 10;
+										$page = isset($_GET['page']) ? $_GET['page'] : 1;
+										$start = ($page - 1) * $entries_per_page;
+										$total_entries = $result->num_rows;
+										$total_pages = ceil($total_entries / $entries_per_page);
+										
+										// Display the search bar and the table of entries
+										echo "<form method='GET' action=''>";
+										echo "<input type='text' name='search' placeholder='Search for command'>";
+										echo "<input type='submit' value='Search'>";
+										echo "</form>";
+										
+										echo "<table>";
+										echo "<tr><th>Command</th><th>Message</th><th>User Level</th></tr>";
+										
+										if ($result->num_rows > 0) {
+  										// Display the selected entries on the current page
+  										$i = 0;
+  										while($row = $result->fetch_assoc()) {
+    										$i++;
+    										if ($i > $start && $i <= ($start + $entries_per_page)) {
+												echo "<tr><td>" . $row['command'] . "</td><td>" . $row['message'] . "</td><td>" . $row['userlevel'] . "</td></tr>";
+    										}
+										}
+									} else {
+										echo "<tr><td colspan='3'>No entries found.</td></tr>";
+									}
+									echo "</table>";
+										
+										// Display the pagination links
+										echo "<div>";
+										echo "Page " . $page . " of " . $total_pages . ": ";
+										for ($i = 1; $i <= $total_pages; $i++) {
+											if ($i == $page) {
+												echo $i . " ";
+											} else {
+												echo "<a href='?page=" . $i . "&search=" . $_GET['search'] . "'>" . $i . "</a> ";
+											}
+										}
+										echo "</div>";
+										
+										$conn->close();										
+										?>
 								</div>
 							</section>
 
