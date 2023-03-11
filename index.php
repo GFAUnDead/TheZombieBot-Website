@@ -41,7 +41,7 @@
 									<header class="major">
 										<h2>TheZombiesBot</h2>
 										<p>What is TheZombiesBot?<br>
-											‌It is the Twitch Chat Bot built by gfaUnDead.<br>
+											It is the Twitch Chat Bot built by gfaUnDead.<br>
 											This bot helps with moderation and chat interactions!</p>
 									</header>
 									<p></p>
@@ -50,7 +50,7 @@
 
 							<section id="commands">
 								<div class="container">
-									<h3>COMMANDS - !cmds</h3>
+									<h3>COMMANDS</h3>
 									<?php
 										// Connect to the database
 										$servername = "localhost";
@@ -64,7 +64,7 @@
 										}
 										
 										// Retrieve the data from the table
-										$sql = "SELECT * FROM myTable WHERE command LIKE '%" . $_GET['search'] . "%' ORDER BY userlevel DESC";
+										$sql = "SELECT * FROM commands WHERE command LIKE '%" . $_GET['search'] . "%' ORDER BY userlevel DESC";
 										$result = $conn->query($sql);
 										
 										// Determine how many entries to display per page
@@ -83,19 +83,35 @@
 										echo "<table>";
 										echo "<tr><th>Command</th><th>Message</th><th>User Level</th></tr>";
 										
-										if ($result->num_rows > 0) {
-  										// Display the selected entries on the current page
-  										$i = 0;
-  										while($row = $result->fetch_assoc()) {
-    										$i++;
-    										if ($i > $start && $i <= ($start + $entries_per_page)) {
-												echo "<tr><td>" . $row['command'] . "</td><td>" . $row['message'] . "</td><td>" . $row['userlevel'] . "</td></tr>";
+										while ($row = mysqli_fetch_assoc($result)) {
+    										$command = $row['command'];
+    										$message = $row['message'];
+    										$userlevel = $row['userlevel'];
+										    
+    										// Convert the userlevel value to its corresponding text value
+    										switch ($userlevel) {
+        										case 1:
+            										$userlevel_text = 'Caster';
+            										break;
+        										case 2:
+            										$userlevel_text = 'Mods';
+            										break;
+        										case 3:
+            										$userlevel_text = 'VIPs';
+            										break;
+        										case 4:
+            										$userlevel_text = 'Everyone';
+            										break;
+        										default:
+            										$userlevel_text = 'Unknown';
+            										break;
     										}
+										    
+    										// Display the table row with the data
+    										echo "<tr><td>$command</td><td>$message</td><td>$userlevel_text</td></tr>";
 										}
-									} else {
-										echo "<tr><td colspan='3'>No entries found.</td></tr>";
-									}
-									echo "</table>";
+										
+										echo "</table>";
 										
 										// Display the pagination links
 										echo "<div>";
