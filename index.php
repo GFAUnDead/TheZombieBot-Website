@@ -17,9 +17,10 @@
 				</header>
 				<nav id="nav">
 					<ul>
-						<li><a href="#commands" target="_self">Commands</a></li>
+						<li><a href="./index.php" target="_self">Commands</a></li>
 						<li><a href="./mods.php" target="_self">Mod Commands</a></li>
 						<li><a href="./werewolf.php" target="_self">WereWolf Commands</a></li>
+						<li><a href="./gamesplayed.php" target="_self">Games Played</a></li>
 						<li><a href="https://gfaundead.stream" target="_blank">Main Website</a></li>
 					</ul>
 				</nav>
@@ -53,10 +54,10 @@
 									<h3>COMMANDS</h3>
 									<?php
     									// Connect to the database
-    									$servername = "localhost";
-    									$username = "thezombiebot_commands";
+    									$servername = "(REDACTED)";
+    									$username = "(REDACTED)";
     									$password = "(REDACTED)";
-										$dbname = "thezombiebot_commands";
+										$dbname = "(REDACTED)";
 									
     									$conn = new mysqli($servername, $username, $password, $dbname);
     									if ($conn->connect_error) {
