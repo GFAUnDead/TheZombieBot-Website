@@ -18,7 +18,9 @@
 				<nav id="nav">
 					<ul>
 						<li><a href="./index.php" target="_self">Commands</a></li>
+						<li><a href="./mods.php" target="_self">Mod Commands</a></li>
 						<li><a href="./werewolf.php" target="_self">WereWolf Commands</a></li>
+						<li><a href="./gamesplayed.php" target="_self">Games Played</a></li>
 						<li><a href="https://gfaundead.stream" target="_blank">Main Website</a></li>
 					</ul>
 				</nav>
@@ -51,13 +53,87 @@
 								<div class="container">
 									<h3>COMMANDS - !cmds</h3>
 									<ul class="feature-icons">
-										<li><strong>MODS:</strong>
-											<br>!rso (During raids only)
-											<br>!so  (General shout out)
-											<br>!sso (People you know who stream)
-											<br />
-											<br>!justchatting<br />(Changes the twitch category to "Just Chatting")
-										</li>
+									<?php
+									    // Connect to the database
+									    $servername = "(REDACTED)";
+									    $username = "(REDACTED)";
+									    $password = "(REDACTED)";
+									    $dbname = "(REDACTED)";
+									
+									    $conn = new mysqli($servername, $username, $password, $dbname);
+									    if ($conn->connect_error) {
+									        die("Connection failed: " . $conn->connect_error);
+									    }
+									
+									    // Determine how many entries to display per page
+									    $entries_per_page = 25;
+									    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+									    $start = ($page - 1) * $entries_per_page;
+									
+									    // Retrieve the data from the table with userlevel = 2 (mods)
+									    $sql = "SELECT * FROM commands WHERE userlevel = 2 AND command LIKE '%" . $_GET['search'] . "%' ORDER BY id ASC LIMIT $start, $entries_per_page";
+									    $result = $conn->query($sql);
+									
+									    // Count the total number of entries
+									    $total_entries_sql = "SELECT COUNT(*) as count FROM commands WHERE userlevel = 2 AND command LIKE '%" . $_GET['search'] . "%'";
+									    $total_entries_result = $conn->query($total_entries_sql);
+									    $total_entries_row = $total_entries_result->fetch_assoc();
+									    $total_entries = $total_entries_row['count'];
+									    $total_pages = ceil($total_entries / $entries_per_page);
+									
+									    // Display the search bar and the table of entries
+									    echo "<form method='GET' action=''>";
+									    echo "<input type='text' name='search' id='search' placeholder='Search for command'>";
+									    echo "</form>";
+									
+									    echo "<table>";
+									    echo "<tr><th>Command</th><th>Message</th><th>User Level</th></tr>";
+									
+									    while ($row = mysqli_fetch_assoc($result)) {
+									        $command = $row['command'];
+									        $message = $row['message'];
+									        $userlevel = $row['userlevel'];
+									
+									        // Convert the userlevel value to its corresponding text value
+									        switch ($userlevel) {
+									            case 1:
+									                $userlevel_text = 'Caster';
+									                break;
+									            case 2:
+									                $userlevel_text = 'Mods';
+									                break;
+									            case 3:
+									                $userlevel_text = 'VIPs';
+									                break;
+									            case 4:
+									                $userlevel_text = 'Everyone';
+									                break;
+									            default:
+									                $userlevel_text = 'Unknown';
+									                break;
+									        }
+									
+									        // Display the table row with the data
+									        echo "<tr><td>$command</td><td>$message</td><td>$userlevel_text</td></tr>";
+									    }
+									
+									    echo "</table>";
+									
+									    // Display the pagination links
+									    echo "<div>";
+									    echo "Page " . $page . " of " . $total_pages . ": ";
+									    for ($i = 1; $i <= $total_pages; $i++) {
+									        if ($i == $page) {
+									            echo $i . " ";
+									        } else {
+									            echo "<a href='?page=" . $i . "&search=" . $_GET['search'] . "'>" . $i . "</a> ";
+									        }
+									    }
+									    echo "</div>";
+									
+									    $conn->close();
+									?>
+
 									</ul>
 								</div>
 							</section>
