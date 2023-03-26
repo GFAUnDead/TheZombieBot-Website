@@ -19,6 +19,8 @@
 					<ul>
 						<li><a href="./index.php" target="_self">Commands</a></li>
 						<li><a href="./mods.php" target="_self">Mod Commands</a></li>
+						<li><a href="./werewolf.php" target="_self">WereWolf Commands</a></li>
+						<li><a href="./gamesplayed.php" target="_self">Games Played</a></li>
 						<li><a href="https://gfaundead.stream" target="_blank">Main Website</a></li>
 					</ul>
 				</nav>
