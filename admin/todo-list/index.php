@@ -85,8 +85,6 @@
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
-                    
-            // Get the result set from the executed statement
             $result = $stmt->get_result();
                     
             // Check if the query was successful
@@ -104,7 +102,6 @@
                 exit();
             }
             
-            // Display text for user
             echo "<h2>Viewing all available tasks on this page for $_GET[channel]:</h2>\r\n";
             
             // Display the search bar and the table of entries
@@ -117,7 +114,7 @@
             
             while ($row = mysqli_fetch_assoc($result)) {
                 $todo_text = $row['todo_text'];
-                
+            
                 // Display the table row with the data
                 echo "<tr><td>$todo_text</td></tr>\r\n";
             }
