@@ -15,7 +15,7 @@
 			<button onclick="location.href='index.php'">Home</button>
 			<button onclick="location.href='commands/index.php'">Commands</button>
 			<button onclick="location.href='gamesplayed/index.php'">Games Played</button>
-			<button onclick="location.herf='todo-list/index.php'">To-do List</button>
+			<button onclick="location.href='todo-list/index.php'">To-do List</button>
 		</div>
 	</header>
 
