@@ -83,7 +83,6 @@
                 // Retrieve the data from the table for the specified channel name and channel owner
                 $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT id FROM channels WHERE name='". $_GET[channel] ."')";
                 $result = $conn->query($sql);
-
 				
                 // Display text for user
                 echo "<h2>Viewing all available tasks on this page for $_GET[channel]:</h2>\r\n";
