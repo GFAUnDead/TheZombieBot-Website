@@ -46,15 +46,18 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            // Prepare the SQL statement to retrieve the channel name and username for the given API key
-            $stmt = $conn->prepare("SELECT channelname FROM allowed_users WHERE api_key = ?");
-            $stmt->bind_param("s", $api_key);
+            // Prepare the SQL statement to retrieve the channel id and name for the given API key
+            $stmt = $conn->prepare("SELECT id FROM channels WHERE name = ?");
+            $stmt->bind_param("s", $channelname);
+
+            // Bind the channel name from the previous query to the variable
+            $channelname = $channelname;
 
             // Execute the SQL statement
             $stmt->execute();
 
             // Bind the result to variables
-            $stmt->bind_result($channelname);
+            $stmt->bind_result($channel_id);
 
             // Fetch the result
             $stmt->fetch();
@@ -65,19 +68,33 @@
             // Close the database connection
             $conn->close();
 
-            // Check if the provided API key is valid and retrieve the channel name from the database
-            if (empty($channelname)) {
+            // Check if the provided API key is valid and retrieve the channel id from the database
+            if (empty($channel_id)) {
                 // Return an error message if the API key is not valid
                 echo "Invalid API key.";
                 exit();
             }
+
+            // Check if the channel name is specified in the URL
+            if (isset($_GET['channel'])) {
+                // Retrieve the channel name from the URL
+                $channelname = $_GET['channel'];
+            } else {
+                // Return an error message if the channel name is not specified in the URL
+                echo "Your channel name is required.";
+                exit();
+            }
             
             // Displays the user form to add tasks into the database
-            echo "<h2>Add a task to your to do list:</h2>\r\n";
-            echo "<form method='post' action=''>\r\n";
-            echo "<label for='todo'>Your Task:</label>\r\n";
-            echo "<input type='text' id='todo' name='task' required>\r\n";
-            echo "<input type='submit' value='Add Task'>\r\n";
+            echo "<h2>Add a task to your to do list:</h2>";
+            echo "<form method='post' action=''>";
+
+            // Pass the channel ID as a hidden input field
+            echo "<input type='hidden' name='channel_id' value='$channel_id'>";
+
+            echo "<label for='todo'>Your Task:</label>";
+            echo "<input type='text' id='todo' name='todo_text' required>";
+            echo "<input type='submit' value='Add Task'>";
             echo "</form>";
                     
             // Connect to the database
