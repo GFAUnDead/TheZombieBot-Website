@@ -74,31 +74,31 @@
             
             // Displays the user form to add tasks into the database
             echo "<h2>Add a task to your to do list:</h2>\r\n";
-		    echo "<form method='post' action=''>\r\n";
-			echo "<label for='todo'>Your Task:</label>\r\n";
-			echo "<input type='text' id='todo' name='task' required>\r\n";
-			echo "<input type='submit' value='Add Task'>\r\n";
+            echo "<form method='post' action=''>\r\n";
+            echo "<label for='todo'>Your Task:</label>\r\n";
+            echo "<input type='text' id='todo' name='task' required>\r\n";
+            echo "<input type='submit' value='Add Task'>\r\n";
             echo "</form>";
 
             // Connect to the database
-			include('db_connect.php');
+            include('db_connect.php');
 
-			// Check if the form has been submitted
-			if ($_SERVER["REQUEST_METHOD"] == "POST") {
-				$task = $_POST["task"];
-				
-				// Insert the game name into the table
-				$sql = "INSERT INTO todos (channel_id, todo_text) VALUES ('$task')";
-				
-				if ($conn->query($sql) === TRUE) {
-					echo "<p>The task '$task' has been added to the to do list.</p>";
-				} else {
-					echo "Error: " . $sql . "<br>" . $conn->error;
-				}
-				
-				// Close the database connection
-				$conn->close();
-			}
+            // Check if the form has been submitted
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $task = $_POST["task"];
+
+                // Insert the task into the table
+                $sql = "INSERT INTO todos (channel_id, todo_text) VALUES ('$channelname', '$task')";
+
+                if ($conn->query($sql) === TRUE) {
+                    echo "<p>The task '$task' has been added to the to do list.</p>";
+                } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+
+                // Close the database connection
+                $conn->close();
+            }
 		?>
 	</div>
 </body>
