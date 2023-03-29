@@ -14,7 +14,7 @@
 			<button onclick="location.href='../index.php'">BACK</button>
 			<button onclick="location.href='index.php'">Home</button>
 			<button onclick="location.href='insert.php'">New</button>
-            <button onclick="location.href='udpate.php'">Update</button>
+            <button onclick="location.href='update.php'">Update</button>
             <button onclick="location.href='completed.php'">Done</button>
 			<button onclick="location.href='remove.php'">Delete</button>
 		</div>
