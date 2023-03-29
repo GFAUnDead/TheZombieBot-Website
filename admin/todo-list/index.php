@@ -81,7 +81,7 @@
                 }
 
                 // Retrieve the data from the table for the specified channel name and channel owner
-                $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT id FROM channels WHERE name='$channel_name' AND owner='$channelname')";
+                $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT id FROM channels WHERE name='". $_GET[channel] ."')";
                 $result = $conn->query($sql);
 
 				
