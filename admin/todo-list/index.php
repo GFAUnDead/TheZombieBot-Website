@@ -81,11 +81,27 @@
                 }
 
                 // Retrieve the data from the table for the specified channel name and channel owner
-                $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT id FROM channels WHERE name='". $_GET[channel] ."')";
+                $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT id FROM channels WHERE name='". $_GET['channel'] ."')";
                 $result = $conn->query($sql);
-				
+
+                // Check if the query was successful
+                if (!$result) {
+                    // If not, log the error and display an error message to the user
+                    error_log("Database query failed: " . $conn->error);
+                    echo "An error occurred while retrieving the data. Please try again later.";
+                    exit();
+                }
+
+                // Check if any rows were returned
+                if ($result->num_rows === 0) {
+                    // If not, display a message to the user
+                    echo "No data found for the specified channel.";
+                    exit();
+                }
+
                 // Display text for user
                 echo "<h2>Viewing all available tasks on this page for $_GET[channel]:</h2>\r\n";
+
                 // Display the search bar and the table of entries
                 echo "<form method='GET' action=''>\r\n";
                 echo "<input type='text' name='search' id='search' placeholder='Search for your tasks'>\r\n";
@@ -96,12 +112,13 @@
 
                 while ($row = mysqli_fetch_assoc($result)) {
                     $todo_text = $row['todo_text'];
-                
+
                     // Display the table row with the data
                     echo "<tr><td>$todo_text</td></tr>\r\n";
                 }
 
                 echo "</table>";
+
 
                 $conn->close();									
 				?>
