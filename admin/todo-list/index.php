@@ -85,7 +85,10 @@
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
-
+                    
+            // Get the result set from the executed statement
+            $result = $stmt->get_result();
+                    
             // Check if the query was successful
             if (!$result) {
                 // If not, log the error and display an error message to the user
@@ -93,34 +96,35 @@
                 echo "An error occurred while retrieving the data. Please try again later.";
                 exit();
             }
-
+            
             // Check if any rows were returned
             if ($result->num_rows === 0) {
                 // If not, display a message to the user
                 echo "No data found for the specified channel.";
                 exit();
             }
-
+            
             // Display text for user
             echo "<h2>Viewing all available tasks on this page for $_GET[channel]:</h2>\r\n";
-
+            
             // Display the search bar and the table of entries
             echo "<form method='GET' action=''>\r\n";
             echo "<input type='text' name='search' id='search' placeholder='Search for your tasks'>\r\n";
             echo "</form>\r\n";
-
+            
             echo "<table>\r\n";
             echo "<tr><th>To Do List</th></tr>\r\n";
-
+            
             while ($row = mysqli_fetch_assoc($result)) {
                 $todo_text = $row['todo_text'];
-            
+                
                 // Display the table row with the data
                 echo "<tr><td>$todo_text</td></tr>\r\n";
             }
-
+            
             echo "</table>";
-
+            
+            $stmt->close();
             $conn->close();
 		?>
 	</div>
