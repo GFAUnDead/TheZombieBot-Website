@@ -14,8 +14,10 @@
 		<div class="menu">
 			<button onclick="location.href='../index.php'">BACK</button>
 			<button onclick="location.href='index.php'">Home</button>
-			<button onclick="location.href='insert.php'">Add To The List</button>
-			<button onclick="location.href='remove.php'">Remove From The List</button>
+			<button onclick="location.href='insert.php'">New</button>
+            <button onclick="location.href='udpate.php'">Update</button>
+            <button onclick="location.href='completed.php'">Done</button>
+			<button onclick="location.href='remove.php'">Delete</button>
 		</div>
 	</header>
 
@@ -94,7 +96,7 @@
 				$result = $conn->query($sql);
 				
                 // Display text for user
-                echo "<h2>Viewing all available tasks on this page for $name:</h2>";
+                echo "<h2>Viewing all available tasks on this page for $_GET[channel]:</h2>";
 				// Display the search bar and the table of entries
 				echo "<form method='GET' action=''>";
 				echo "<input type='text' name='search' id='search' placeholder='Search for your tasks'>";
