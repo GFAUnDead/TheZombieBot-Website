@@ -14,10 +14,6 @@
         <div class="menu">
             <button onclick="location.href='../index.php'">BACK</button>
             <button onclick="location.href='index.php'">Home</button>
-            <button onclick="location.href='insert.php'">New</button>
-            <button onclick="location.href='update.php'">Update</button>
-            <button onclick="location.href='completed.php'">Done</button>
-            <button onclick="location.href='remove.php'">Delete</button>
         </div>
     </header>
 
@@ -90,7 +86,7 @@
             $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
             $result = $stmt->get_result();
-            echo "$result";
+            echo "$todo_text";
 
             // Check if the query was successful
             if (!$result) {
@@ -112,6 +108,11 @@
                 echo "No data found for the specified channel.";
                 exit();
             } else {
+            echo "<button onclick='location.href='insert.php?api=$api_key''>New</button>";
+            echo "<button onclick='location.href='update.php?api=$api_key''>Update</button>";
+            echo "<button onclick='location.href='completed.php?api=$api_key''>Done</button>";
+            echo "<button onclick='location.href='remove.php?api=$api_key''>Delete</button>";
+            echo "<br>";
             echo "<h2>Viewing all available tasks on this page for $channelname:</h2>\r\n";
 
             // Display the search bar and the table of entries
