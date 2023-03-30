@@ -85,7 +85,7 @@
             }
             
             // Retrieve the data from the table for the specified channel name
-            $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT
+            $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT channel_id FROM channels WHERE channel_name = ?)";
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Check if the API key is provided in the form data
                 if (isset($_POST['api_key'])) {
