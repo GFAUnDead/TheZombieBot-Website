@@ -85,11 +85,12 @@
             }
 
             // Retrieve the data from the table for the specified channel name
-            $sql = "SELECT todo_text FROM todos WHERE user_id IN (SELECT id FROM users WHERE name=$channelname)";
+            $sql = "SELECT todo_text FROM todos WHERE user_id IN (SELECT id FROM users WHERE name='$channelname')";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
             $result = $stmt->get_result();
+            echo "$result";
 
             // Check if the query was successful
             if (!$result) {
@@ -100,10 +101,10 @@
             }
 
             // If there are results tell me
-            if ($result->num_rows > 0) {
-                echo "I can see the data";
-                exit();
-             } 
+            // if ($result->num_rows > 0) {
+            //    echo "I can see the data";
+            //    exit();
+            // } 
 
             // Check if any rows were returned
             if ($result->num_rows === 0) {
@@ -132,7 +133,7 @@
 
             $stmt->close();
             $conn->close();
-        }
+        };
 		?>
 	</div>
 </body>
