@@ -85,7 +85,7 @@
             }
 
             // Retrieve the data from the table for the specified channel name
-            $sql = "SELECT todo_text FROM tasks WHERE channel_id IN (SELECT id FROM channels WHERE name=?)";
+            $sql = "SELECT todo_text FROM todos WHERE user_id IN (SELECT id FROM users WHERE name=$channelname)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
