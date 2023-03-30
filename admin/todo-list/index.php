@@ -112,7 +112,7 @@
                 echo "No data found for the specified channel.";
                 exit();
             } else {
-            echo "<h2>Viewing all available tasks on this page for $_GET[channel]:</h2>\r\n";
+            echo "<h2>Viewing all available tasks on this page for $channelname:</h2>\r\n";
 
             // Display the search bar and the table of entries
             echo "<form method='GET' action=''>\r\n";
