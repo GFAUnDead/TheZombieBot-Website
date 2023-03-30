@@ -96,21 +96,21 @@
         									// Convert the userlevel value to its corresponding text value
         									switch ($userlevel) {
             									case 1:
-                									$userlevel_text = 'Caster';
-                									break;
-													case 2:
-														$userlevel_text = 'Mods';
-														break;
-														case 3:
-															$userlevel_text = 'VIPs';
-															break;
-															case 4:
-																$userlevel_text = 'Everyone';
-																break;
-																default:
-																$userlevel_text = 'Unknown';
-																break;
-															}
+                								$userlevel_text = 'Caster';
+                								break;
+												case 2:
+												$userlevel_text = 'Mods';
+												break;
+												case 3:
+												$userlevel_text = 'VIPs';
+												break;
+												case 4:
+												$userlevel_text = 'Everyone';
+												break;
+												default:
+												$userlevel_text = 'Unknown';
+												break;
+											}
 									
         									// Display the table row with the data
         									echo "<tr><td>$command</td><td>$message</td><td>$userlevel_text</td></tr>";
