@@ -22,101 +22,59 @@
 
     <div class="container">
         <br>
-		<?php
-			// Check if the API key is specified in the URL
-            if (isset($_GET['api'])) {
-                // Retrieve the API key from the URL
-                $api_key = $_GET['api'];
-            } else {
-                // Return an error message if the API key is not specified in the URL
-                echo "API key is required.";
-                exit();
-            }
+            <?php
+                // Check if the API key was submitted via a form
+                if ($_SERVER['REQUEST_METHOD'] == 'POST');
+                // Retrieve the API key from the form data
+                $api_key = $_POST['api_key'];
 
-            // Connect to the database
-            $servername = "(REDACTED)";
-            $username = "(REDACTED)";
-            $password = "(REDACTED)";
-            $dbname = "(REDACTED)";
+                // Connect to the database that stores the API keys
+                $api_servername = "(REDACTED)";
+                $api_username = "(REDACTED)";
+                $api_password = "(REDACTED)";
+                $api_dbname = "(REDACTED)";
+                $api_conn = new mysqli($api_servername, $api_username, $api_password, $api_dbname);
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check if the connection is successful
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            // Prepare the SQL statement to retrieve the channel id and name for the given API key
-            $stmt = $conn->prepare("SELECT id FROM channels WHERE name = ?");
-            $stmt->bind_param("s", $channelname);
-
-            // Bind the channel name from the previous query to the variable
-            $channelname = $channelname;
-
-            // Execute the SQL statement
-            $stmt->execute();
-
-            // Bind the result to variables
-            $stmt->bind_result($channel_id);
-
-            // Fetch the result
-            $stmt->fetch();
-
-            // Close the statement
-            $stmt->close();
-
-            // Close the database connection
-            $conn->close();
-
-            // Check if the provided API key is valid and retrieve the channel id from the database
-            if (empty($channel_id)) {
-                // Return an error message if the API key is not valid
-                echo "Invalid API key.";
-                exit();
-            }
-
-            // Check if the channel name is specified in the URL
-            if (isset($_GET['channel'])) {
-                // Retrieve the channel name from the URL
-                $channelname = $_GET['channel'];
-            } else {
-                // Return an error message if the channel name is not specified in the URL
-                echo "Your channel name is required.";
-                exit();
-            }
-            
-            // Displays the user form to add tasks into the database
-            echo "<h2>Add a task to your to do list:</h2>";
-            echo "<form method='post' action=''>";
-
-            // Pass the channel ID as a hidden input field
-            echo "<input type='hidden' name='channel_id' value='$channel_id'>";
-
-            echo "<label for='todo'>Your Task:</label>";
-            echo "<input type='text' id='todo' name='todo_text' required>";
-            echo "<input type='submit' value='Add Task'>";
-            echo "</form>";
-                    
-            // Connect to the database
-            include('db_connect.php');
-                    
-            // Check if the form has been submitted
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $task = $_POST["task"];
-                
-                // Insert the task into the table
-                $sql = "INSERT INTO todos (channel_id, todo_text) VALUES ('$channelname', '$task')";
-                
-                if ($conn->query($sql) === TRUE) {
-                    echo "<p>The task '$task' has been added to the to do list.</p>";
-                } else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;
+                // Check if the connection is successful
+                if ($api_conn->connect_error) {
+                    die("API Connection failed: " . $api_conn->connect_error);
                 }
-                
+
+                // Prepare the SQL statement to retrieve the channel name and username for the given API key
+                $stmt = $api_conn->prepare("SELECT channelname FROM allowed_users WHERE api_key = ?");
+                $stmt->bind_param("s", $api_key);
+
+                // Execute the SQL statement
+                $stmt->execute();
+
+                // Bind the result to variables
+                $stmt->bind_result($channelname);
+
+                // Fetch the result
+                $stmt->fetch();
+
+                // Close the statement
+                $stmt->close();
+
                 // Close the database connection
-                $conn->close();
-            }
-		?>
+                $api_conn->close();
+
+                // Check if the provided API key is valid and retrieve the channel name from the database
+                if (empty($channelname)) {
+                    // Return an error message if the API key is not valid
+                    echo "Invalid API key.";
+                exit();
+                } else {
+                // Display the form to get the API key from the user
+                if ($_SERVER['REQUEST_METHOD'] == 'GET' || (isset($_POST['api_key']) && !$api_key_valid));
+                echo '<form method="post">';
+                echo '<label for="api_key">API Key:</label>';
+                echo '<input type="text" id="api_key" name="api_key">';
+                echo '<input type="submit" value="Submit">';
+                echo '</form>';
+                exit();
+                }
+        ?>
 	</div>
 </body>
 </html>
