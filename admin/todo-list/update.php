@@ -22,121 +22,152 @@
 
     <div class="container">
         <br>
-            <?php
-                // Check if the API key is provided in the URL
-                if (!isset($_GET['api'])) {
-                    echo "API key is missing.";
-                    exit();
-                }
+        <?php
+            // Check if the API key is provided in the URL
+            if (!isset($_GET['api'])) {
+                echo "API key is missing.";
+                exit();
+            }
+            
+            // Retrieve the API key from the URL
+            $api_key = $_GET['api'];
 
-                // Retrieve the API key from the URL
-                $api_key = $_GET['api'];
+            // Connect to the API keys database
+            $servername = "(REDACTED)";
+            $username = "(REDACTED)";
+            $password = "(REDACTED)";
+            $dbname = "(REDACTED)";
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-                // Connect to the API keys database
-                $servername = "(REDACTED)";
-                $username = "(REDACTED)";
-                $password = "(REDACTED)";
-                $dbname = "(REDACTED)";
+            // Check if the connection is successful
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+            // Prepare the SQL statement to retrieve the channel name from the database
+            $stmt = $conn->prepare("SELECT channelname FROM allowed_users WHERE api_key = ?");
+            $stmt->bind_param("s", $api_key);
 
-                $conn = new mysqli($servername, $username, $password, $dbname);
+            // Execute the SQL statement
+            $stmt->execute();
 
-                // Check if the connection is successful
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+            // Bind the result to variables
+            $stmt->bind_result($channelname);
 
-                // Prepare the SQL statement to retrieve the channel name from the database
-                $stmt = $conn->prepare("SELECT channelname FROM allowed_users WHERE api_key = ?");
-                $stmt->bind_param("s", $api_key);
+            // Fetch the result
+            $stmt->fetch();
 
-                // Execute the SQL statement
-                $stmt->execute();
+            // Close the statement
+            $stmt->close();
 
-                // Bind the result to variables
-                $stmt->bind_result($channelname);
+            // Close the database connection
+            $conn->close();
 
-                // Fetch the result
-                $stmt->fetch();
+            // Check if the provided API key is valid and retrieve the channel name from the database
+            if (empty($channelname)) {
+                // Return an error message if the API key is not valid
+                echo "Invalid API key.";
+                exit();
+            }
 
-                // Close the statement
-                $stmt->close();
+            // Connect to the database
+            $servername = "(REDACTED)";
+            $username = "(REDACTED)";
+            $password = "(REDACTED)";
+            $dbname = "(REDACTED)";
 
-                // Close the database connection
-                $conn->close();
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-                // Check if the provided API key is valid and retrieve the channel name from the database
-                if (empty($channelname)) {
-                    // Return an error message if the API key is not valid
-                    echo "Invalid API key.";
-                    exit();
-                }
+            // Check if the connection is successful
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+            // Prepare the SQL statement to retrieve the user's tasks from the database
+            $stmt = $conn->prepare("SELECT id, todo_text FROM todos WHERE user_id=(SELECT id FROM users WHERE name=?)");
+            $stmt->bind_param("s", $channelname);
 
-                // Connect to the database
-                $servername = "(REDACTED)";
-                $username = "(REDACTED)";
-                $password = "(REDACTED)";
-                $dbname = "(REDACTED)";
+            // Execute the SQL statement
+            $stmt->execute();
 
-                $conn = new mysqli($servername, $username, $password, $dbname);
+            // Bind the result to variables
+            $stmt->bind_result($task_id, $task_text);
 
-                // Check if the connection is successful
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+            // Output the tasks in an HTML table
+            echo "<table>";
+            echo "<tr><th>Task ID</th><th>Task Text</th></tr>";
+            while ($stmt->fetch()) {
+                echo "<tr><td>$task_id</td><td>$task_text</td></tr>";
+            }
+            echo "</table>";
+            // Close the statement
+            $stmt->close();
 
-                // Prepare the SQL statement to retrieve the user's ID from the database
-                $stmt = $conn->prepare("SELECT id FROM users WHERE name = ?");
-                $stmt->bind_param("s", $channelname);
+            // Close the database connection
+            $conn->close();
 
-                // Execute the SQL statement
-                $stmt->execute();
+            // Connect to the database
+            $servername = "(REDACTED)";
+            $username = "(REDACTED)";
+            $password = "(REDACTED)";
+            $dbname = "(REDACTED)";
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-                // Bind the result to variables
-                $stmt->bind_result($current_user_id);
+            // Check if the connection is successful
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+            // Prepare the SQL statement to retrieve the user's ID from the database
+            $stmt = $conn->prepare("SELECT id FROM users WHERE name = ?");
+            $stmt->bind_param("s", $channelname);
 
-                // Fetch the result
-                $stmt->fetch();
+            // Execute the SQL statement
+            $stmt->execute();
 
-                // Close the statement
-                $stmt->close();
+            // Bind the result to variables
+            $stmt->bind_result($current_user_id);
 
-                // Check if the form was submitted
-                if ($_SERVER["REQUEST_METHOD"] == "POST");
-                    // Retrieve the task ID and task text from the form
-                    $task_id = $_POST["todo_id"];
-                    $task_text = $_POST["todo_text"];
+            // Fetch the result
+            $stmt->fetch();
 
-                // Prepare the SQL statement to retrieve the user ID associated with the task
-                $stmt = $conn->prepare("SELECT users.id FROM users INNER JOIN todos ON users.id = todos.user_id WHERE todos.id = ?");
-                $stmt->bind_param("i", $task_id);
+            // Close the statement
+            $stmt->close();
 
-                // Execute the SQL statement
-                $stmt->execute();
+            // Check if the form was submitted
+            if ($_SERVER["REQUEST_METHOD"] == "POST");
+                // Retrieve the task ID and task text from the form
+                $task_id = $_POST["todo_id"];
+                $task_text = $_POST["todo_text"];
 
-                // Bind the result to variables
-                $stmt->bind_result($user_id);
+            // Prepare the SQL statement to retrieve the user ID associated with the task
+            $stmt = $conn->prepare("SELECT users.id FROM users INNER JOIN todos ON users.id = todos.user_id WHERE todos.id = ?");
+            $stmt->bind_param("i", $task_id);
 
-                // Fetch the result
-                $stmt->fetch();
+            // Execute the SQL statement
+            $stmt->execute();
 
-                // Close the statement
-                $stmt->close();
+            // Bind the result to variables
+            $stmt->bind_result($user_id);
 
-                // Check if the task belongs to the user
-                if ($user_id != $channel_id) {
-                    // Return an error message if the task does not belong to the user
-                    echo "You are not authorized to update this task.";
-                    exit();
-                }
+            // Fetch the result
+            $stmt->fetch();
 
-                echo "<form method='POST'>";
-                echo "<label for='todo_id'>Task ID:</label>";
-                echo "<input type='number' name='todo_id' required><br><br>";
-                echo "<label for='todo_text'>Task Text:</label>";
-                echo "<input type='text' name='todo_text' required><br><br>";
-                echo "<input type='submit' value='Update Task'>";
-                echo "</form>";
-            ?>
+            // Close the statement
+            $stmt->close();
+
+            // Check if the task belongs to the user
+            if ($user_id != $channel_id) {
+                // Return an error message if the task does not belong to the user
+                echo "You are not authorized to update this task.";
+                exit();
+            }
+
+            echo "<form method='POST'>";
+            echo "<label for='todo_id'>Task ID:</label>";
+            echo "<input type='number' name='todo_id' required><br><br>";
+            echo "<label for='todo_text'>Task Text:</label>";
+            echo "<input type='text' name='todo_text' required><br><br>";
+            echo "<input type='submit' value='Update Task'>";
+            echo "</form>";
+        ?>
 	</div>
 </body>
 </html>
