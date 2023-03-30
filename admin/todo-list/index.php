@@ -83,66 +83,9 @@
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
-            
-            // Retrieve the data from the table for the specified channel name
-            $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT channel_id FROM channels WHERE channel_name = ?)";
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Check if the API key is provided in the form data
-                if (isset($_POST['api_key'])) {
-                    // Retrieve the API key from the form data
-                    $api_key = $_POST['api_key'];
-                } else {
-                    // Return an error message if the API key is not provided in the form data
-                    echo "API key is required.";
-                    exit();
-                }
-            } else {
-                // Return an error message if the request method is not POST
-                echo "Invalid request method.";
-                exit();
-            }
-
-            // Connect to the database
-            include('db_connect.php');
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            // Prepare the SQL statement to retrieve the channel name and username for the given API key
-            $stmt = $conn->prepare("SELECT channelname FROM allowed_users WHERE api_key = ?");
-            $stmt->bind_param("s", $api_key);
-
-            // Execute the SQL statement
-            $stmt->execute();
-
-            // Bind the result to variables
-            $stmt->bind_result($channelname);
-
-            // Fetch the result
-            $stmt->fetch();
-
-            // Close the statement
-            $stmt->close();
-
-            // Close the database connection
-            $conn->close();
-
-            // Check if the provided API key is valid and retrieve the channel name from the database
-            if (empty($channelname)) {
-                // Return an error message if the API key is not valid
-                echo "Invalid API key.";
-                exit();
-            }
-
-            // Connect to the database
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
 
             // Retrieve the data from the table for the specified channel name
-            $sql = "SELECT todo_text FROM todos WHERE channel_id IN (SELECT id FROM channels WHERE name=?)";
+            $sql = "SELECT todo_text FROM tasks WHERE channel_id IN (SELECT id FROM channels WHERE name=?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
@@ -155,6 +98,12 @@
                 echo "An error occurred while retrieving the data. Please try again later.";
                 exit();
             }
+
+            // If there are results tell me
+            if ($result->num_rows > 0) {
+                echo "I can see the data";
+                exit();
+             } 
 
             // Check if any rows were returned
             if ($result->num_rows === 0) {
