@@ -82,7 +82,7 @@
                 }
 
                 // Prepare the SQL statement to insert the task into the database
-                $stmt = $conn->prepare("INSERT INTO todos (user_id, todo_text, completed) VALUES ((SELECT id FROM users WHERE name=?), ?, false)");
+                $stmt = $conn->prepare("INSERT INTO todos (user_id, todo_text, completed) VALUES ((SELECT id FROM users WHERE name=?), ?, "false")");
                 $stmt->bind_param("ss", $channelname, $_POST['todo_text']);
             
                 // Execute the SQL statement
