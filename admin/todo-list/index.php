@@ -81,12 +81,10 @@
             }
 
             // Retrieve the data from the table for the specified channel name
-            $sql = "SELECT todo_text FROM todos WHERE user_id IN (SELECT id FROM users WHERE name='$channelname')";
+            $sql = "SELECT todo_text, completed FROM todos WHERE user_id IN (SELECT id FROM users WHERE name='$channelname')";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $_GET['channel']);
             $stmt->execute();
             $result = $stmt->get_result();
-            echo "$todo_text";
 
             // Check if the query was successful
             if (!$result) {
@@ -96,26 +94,21 @@
                 exit();
             }
 
-            // If there are results tell me
-            // if ($result->num_rows > 0) {
-            //    echo "I can see the data";
-            //    exit();
-            // } 
-
-            // Check if any rows were returned
+            // If there are no rows returned, display a message to the user
             if ($result->num_rows === 0) {
-                // If not, display a message to the user
                 echo "No data found for the specified channel.";
                 exit();
-            } else {
-            echo "<button onclick='location.href='insert.php?api=$api_key''>New</button>";
-            echo "<button onclick='location.href='update.php?api=$api_key''>Update</button>";
-            echo "<button onclick='location.href='completed.php?api=$api_key''>Done</button>";
-            echo "<button onclick='location.href='remove.php?api=$api_key''>Delete</button>";
-            echo "<br>";
-            echo "<h2>Viewing all available tasks on this page for $channelname:</h2>\r\n";
+            }
 
-            // Display the search bar and the table of entries
+            // Display the buttons for adding, updating, and deleting tasks
+            echo "<button onclick=\"location.href='insert.php?api=$api_key'\">New</button>";
+            echo "<button onclick=\"location.href='update.php?api=$api_key'\">Update</button>";
+            echo "<button onclick=\"location.href='completed.php?api=$api_key'\">Done</button>";
+            echo "<button onclick=\"location.href='remove.php?api=$api_key'\">Delete</button>";
+            echo "<br>";
+
+            // Display the channel name and the search bar
+            echo "<h2>Viewing all available tasks on this page for $channelname:</h2>\r\n";
             echo "<form method='GET' action=''>\r\n";
             echo "<input type='text' name='search' id='search' placeholder='Search for your tasks'>\r\n";
             echo "</form>\r\n";
@@ -125,17 +118,23 @@
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $todo_text = $row['todo_text'];
+                $completed = $row['completed'];
             
-                // Display the table row with the data
-                echo "<tr><td>$todo_text</td></tr>\r\n";
+                // Check if the task is completed
+                if ($completed) {
+                    // If it is, display the task with strike-through formatting
+                    echo "<tr><td><s>$todo_text</s></td></tr>\r\n";
+                } else {
+                    // If it is not, display the task normally
+                    echo "<tr><td>$todo_text</td></tr>\r\n";
+                }
             }
 
             echo "</table>";
 
             $stmt->close();
             $conn->close();
-        };
-		?>
+        ?>
 	</div>
 </body>
 </html>
