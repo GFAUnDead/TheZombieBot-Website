@@ -89,7 +89,7 @@
             $stmt->bind_result($task_id, $task_text, $completed);
 
             // Output the tasks in an HTML table
-            echo "<table>";
+            echo "<table id='todo-table'>";
             echo "<tr><th>Task ID</th><th>Task Text</th><th>Completed</th><th>Action</th></tr>";
             while ($stmt->fetch()) {
                 echo "<tr><td>$task_id</td><td>$task_text</td><td>$completed</td><td>";
@@ -114,7 +114,7 @@
                 $task_text = $_POST["todo_text"];
             
                 // Prepare the SQL statement to update the task as completed in the database
-                $stmt = $conn->prepare("UPDATE todos SET completed = true WHERE id = ?");
+                $stmt = $conn->prepare("UPDATE todos SET completed = 'true' WHERE id = ?");
                 $stmt->bind_param("i", $task_id);
             
                 // Execute the SQL statement
@@ -122,12 +122,17 @@
             
                 // Close the statement
                 $stmt->close();
-            
-                // Refresh the page for updates
-                header("Location: completed.php");
-                exit();
             }
         ?>
+        <script>
+          // Add an event listener for form submission
+          document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', () => {
+              // Reload the page after a short delay
+              setTimeout(() => location.reload(), 1000);
+            });
+        });
+        </script>
 	</div>
 </body>
 </html>
