@@ -95,7 +95,8 @@
                 echo "<tr><td>$task_id</td><td>$task_text</td><td>$completed</td><td>";
                 if ($completed == 0) {
                     echo "<form method='POST' action='completed.php?api=$api_key'>";
-                    echo "<input type='hidden' name='task_id' value='$task_id'>";
+                    echo "<input type='hidden' name='todo_id' value='$task_id'>";
+                    echo "<input type='hidden' name='todo_text' value='$task_text'>";
                     echo "<input type='submit' name='complete' value='Mark Completed'>";
                     echo "</form>";
                 }
@@ -113,7 +114,7 @@
                 $task_text = $_POST["todo_text"];
             
                 // Prepare the SQL statement to update the task as completed in the database
-                $stmt = $conn->prepare("UPDATE todos SET completed = 1 WHERE id = ?");
+                $stmt = $conn->prepare("UPDATE todos SET completed = true WHERE id = ?");
                 $stmt->bind_param("i", $task_id);
             
                 // Execute the SQL statement
