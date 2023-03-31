@@ -11,7 +11,7 @@
 			<h1>To Do List</h1>
 		</div>
 		<div class="menu">
-			<button onclick="history.back();">Home</button>
+			<button onclick="location.href='index.php'">Home</button>
 		</div>
 	</header>
 
