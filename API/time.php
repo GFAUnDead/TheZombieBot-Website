@@ -60,11 +60,32 @@ if (empty($channelname)) {
 // API URL for the specified timezone
 $url = "https://worldtimeapi.org/api/timezone/" . $timezone;
 
-// Retrieve the JSON data from the API
-$jsonData = file_get_contents($url);
+// Initialize a new cURL session
+$curl = curl_init();
+
+// Set the cURL options
+curl_setopt_array($curl, array(
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_URL => $url,
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_SSL_VERIFYHOST => false,
+));
+
+// Execute the cURL session
+$response = curl_exec($curl);
+
+// Check for errors
+if (curl_errno($curl)) {
+    echo "Error: " . curl_error($curl);
+    exit();
+}
+
+// Close the cURL session
+curl_close($curl);
 
 // Convert the JSON data into a PHP array
-$data = json_decode($jsonData, true);
+$data = json_decode($response, true);
+
 
 // Check if the datetime key is present in the $data array
 if (!isset($data['datetime'])) {
