@@ -66,22 +66,21 @@ $jsonData = file_get_contents($url);
 // Convert the JSON data into a PHP array
 $data = json_decode($jsonData, true);
 
+// Check if the datetime key is present in the $data array
+if (!isset($data['datetime'])) {
+    // Return an error message if the datetime key is not present
+    echo "Error: Unable to retrieve datetime from API.";
+    exit();
+}
+
 // Set the timezone to the specified timezone
 date_default_timezone_set($timezone);
 
 // Extract the date and time from the datetime string
-$date = date("l, F j, Y", strtotime($data['datetime']));
-$time = date("h:i:s A", strtotime($data['datetime']));
+$datetime = $data['datetime'];
+$date = date("l, F j, Y", strtotime($datetime));
+$time = date("h:i:s A", strtotime($datetime));
 
 // Display the date and time in the desired format
 echo "It is " . $date . ", and the time is: " . $time . " GMT" . $data['utc_offset'] . ". ";
-
-// Append the log data to the file
-// $logFile = 'time-log.txt';
-// if (file_exists($logFile) && is_writable($logFile)) {
-//     file_put_contents($logFile, $logData, FILE_APPEND);
-// } else {
-    // Return an error message if the log file cannot be written to
-//     echo "Error: Unable to write to log file.";
-// }
 ?>
