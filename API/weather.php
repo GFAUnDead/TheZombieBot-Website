@@ -6,8 +6,20 @@ $city = $_GET['city'] ?? 'Sydney';
 // API URL for the specified units and city
 $url = "https://api.openweathermap.org/data/2.5/weather?q=" . urlencode($city) . "&units=$units&appid=(REDACTED)";
 
-// Retrieve the JSON data from the API
-$jsonData = @file_get_contents($url);
+// Initialize CURL
+$ch = curl_init();
+
+// Set CURL options
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HEADER, false);
+
+// Execute the CURL request
+$jsonData = curl_exec($ch);
+
+// Close the CURL session
+curl_close($ch);
+
 if (!$jsonData) {
     die("Unable to retrieve weather data.");
 }
